@@ -35,7 +35,50 @@ std::array<float, 4> getBorder(sf::Vector2f shapeSize, sf::Vector2f posicionRect
     return bordes;
 }
 
-void checarColision(std::array<float, 4> bordes1, std::array<float, 4> bordes2)
+void activarColisionX(std::array<float, 4> bordes1, std::array<float, 4> bordes2, sf::Vector2f &posicionRectangulo ,int direccionX, int direccionY)
+{
+    if (direccionX != 0)
+    {
+        if(direccionX == 1)
+        {
+            posicionRectangulo.x = bordes2[1]-bordes1[3];
+            direccionX=0;
+        }
+        else if(direccionX == -1)
+        {
+            posicionRectangulo.x = bordes2[1] + bordes2[3];
+            direccionX=0;
+        }
+    }
+    else if (direccionY != 0)
+    {
+        if (direccionY == 1)
+        {
+            posicionRectangulo.y = bordes2[0] - bordes1[2];
+        }
+        else
+        {
+            posicionRectangulo.y = bordes2[2] + bordes2[0];
+        }
+    }
+}
+
+void activarColisionY(std::array<float, 4> bordes1, std::array<float, 4> bordes2, sf::Vector2f &posicionRectangulo ,int direccionX, int direccionY)
+{
+    if (direccionY != 0)
+    {
+        if (direccionY == 1)
+        {
+            posicionRectangulo.y = bordes2[0] - bordes1[2];
+        }
+        else
+        {
+            posicionRectangulo.y = bordes2[2] + bordes2[0];
+        }
+    }
+}
+
+bool checarColision(std::array<float, 4> bordes1, std::array<float, 4> bordes2)
 {
     float ladoArriba1 = bordes1[0];
     float ladoIzquierda1 = bordes1[1];
@@ -50,7 +93,9 @@ void checarColision(std::array<float, 4> bordes1, std::array<float, 4> bordes2)
     (ladoArriba1 + ladoAbajo1 >= ladoArriba2 && ladoArriba1 <= ladoArriba2 + ladoAbajo2))
     {
         std::cout << bordes1[1] << " " << ladoArriba1 << std::endl;
+        return true;
     }
+    return false;
 }
 
 void actualizarDireccion(sf::Vector2f posicionRectangulo, float prePosicionX, float prePosicionY, int &direccionX, int &direccionY)
@@ -85,8 +130,8 @@ int main()
     sf::Vector2f posicionBarrera = {180.f, 280.f};
     barrera.setPosition(posicionBarrera);
 
-    float prePosicionX = shapeSize.x;
-    float prePosicionY = shapeSize.y;
+    float prePosicionX = posicionRectangulo.x;
+    float prePosicionY = posicionRectangulo.y;
     int direccionX = 0;
     int direccionY = 0;
 
@@ -101,11 +146,17 @@ int main()
 
         movimientoJugador(posicionRectangulo);
         actualizarDireccion(posicionRectangulo, prePosicionX, prePosicionY, direccionX, direccionY);
+        
         std::array<float, 4> shapeBordes = getBorder(shapeSize, posicionRectangulo);
         std::array<float, 4> barreraBordes = getBorder(barreraSize, posicionBarrera);
+        std::cout << direccionX << std::endl;
+        if (checarColision(shapeBordes, barreraBordes))
+            activarColisionX(shapeBordes, barreraBordes, posicionRectangulo, direccionX, direccionY);
+        if (checarColision(shapeBordes, barreraBordes))
+            activarColisionY(shapeBordes, barreraBordes, posicionRectangulo, direccionX, direccionY);
         shape.setPosition(posicionRectangulo);
-        checarColision(shapeBordes, barreraBordes);
-
+        prePosicionX = posicionRectangulo.x;
+        prePosicionY = posicionRectangulo.y;
         // WIndow
         window.clear();
         window.draw(barrera);
