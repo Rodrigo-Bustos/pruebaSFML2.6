@@ -42,25 +42,26 @@ void activarColisionX(std::array<float, 4> bordes1, std::array<float, 4> bordes2
         if(direccionX == 1)
         {
             posicionRectangulo.x = bordes2[1]-bordes1[3];
-            direccionX=0;
         }
         else if(direccionX == -1)
         {
             posicionRectangulo.x = bordes2[1] + bordes2[3];
-            direccionX=0;
         }
     }
-    else if (direccionY != 0)
+
+    if (direccionY != 0)
     {
         if (direccionY == 1)
         {
             posicionRectangulo.y = bordes2[0] - bordes1[2];
         }
-        else
+        else if(direccionY == -1)
         {
             posicionRectangulo.y = bordes2[2] + bordes2[0];
         }
     }
+
+    std::cout << bordes1[1] << " " << bordes1[0] << std::endl;
 }
 
 void activarColisionY(std::array<float, 4> bordes1, std::array<float, 4> bordes2, sf::Vector2f &posicionRectangulo ,int direccionX, int direccionY)
@@ -92,7 +93,6 @@ bool checarColision(std::array<float, 4> bordes1, std::array<float, 4> bordes2)
     if ((ladoIzquierda1 + ladoDerecha1 >= ladoIzquierda2 && ladoIzquierda1 <= ladoIzquierda2 + ladoDerecha2) &&
     (ladoArriba1 + ladoAbajo1 >= ladoArriba2 && ladoArriba1 <= ladoArriba2 + ladoAbajo2))
     {
-        std::cout << bordes1[1] << " " << ladoArriba1 << std::endl;
         return true;
     }
     return false;
@@ -121,13 +121,13 @@ int main()
     sf::Vector2f shapeSize = {50.f, 50.f};
     sf::RectangleShape shape(shapeSize);
     shape.setFillColor(sf::Color::Red);
-    sf::Vector2f posicionRectangulo = {120.f, 120.f};
+    sf::Vector2f posicionRectangulo = {0.f, 0.f};
     shape.setPosition(posicionRectangulo);
 
     sf::Vector2f barreraSize = {20.f, 120.f};
     sf::RectangleShape barrera(barreraSize);
     barrera.setFillColor(sf::Color::Green);
-    sf::Vector2f posicionBarrera = {180.f, 280.f};
+    sf::Vector2f posicionBarrera = {50.f, 0.f};
     barrera.setPosition(posicionBarrera);
 
     float prePosicionX = posicionRectangulo.x;
@@ -157,7 +157,7 @@ int main()
         shape.setPosition(posicionRectangulo);
         prePosicionX = posicionRectangulo.x;
         prePosicionY = posicionRectangulo.y;
-        // WIndow
+        // Window
         window.clear();
         window.draw(barrera);
         window.draw(shape);
