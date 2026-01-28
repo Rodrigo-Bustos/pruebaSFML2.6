@@ -49,18 +49,6 @@ void activarColisionX(std::array<float, 4> bordes1, std::array<float, 4> bordes2
         }
     }
 
-    if (direccionY != 0)
-    {
-        if (direccionY == 1)
-        {
-            posicionRectangulo.y = bordes2[0] - bordes1[2];
-        }
-        else if(direccionY == -1)
-        {
-            posicionRectangulo.y = bordes2[2] + bordes2[0];
-        }
-    }
-
     std::cout << bordes1[1] << " " << bordes1[0] << std::endl;
 }
 
