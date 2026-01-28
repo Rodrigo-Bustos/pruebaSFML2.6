@@ -2,23 +2,26 @@
 #include <array>
 #include <iostream>
 
-void movimientoJugador(sf::Vector2f &posicionRectangulo)
+void movimientoJugadorX(sf::Vector2f &posicionRectangulo)
+{
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+    {
+        posicionRectangulo.x--;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+    {
+        posicionRectangulo.x++;
+    }
+}
+void movimientoJugadorY(sf::Vector2f &posicionRectangulo)
 {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
     {
         posicionRectangulo.y--;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-    {
-        posicionRectangulo.x--;
-    }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
     {
         posicionRectangulo.y++;
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-    {
-        posicionRectangulo.x++;
     }
 }
 
@@ -86,14 +89,18 @@ bool checarColision(std::array<float, 4> bordes1, std::array<float, 4> bordes2)
     return false;
 }
 
-void actualizarDireccion(sf::Vector2f posicionRectangulo, float prePosicionX, float prePosicionY, int &direccionX, int &direccionY)
+void actualizarDireccionX(sf::Vector2f posicionRectangulo, float prePosicionX, float prePosicionY, int &direccionX, int &direccionY)
 {
     (posicionRectangulo.x > prePosicionX) ? direccionX = 1 : direccionX = -1;
-    (posicionRectangulo.y > prePosicionY) ? direccionY = 1 : direccionY = -1;
     if (posicionRectangulo.x == prePosicionX)
     {
         direccionX = 0;
-    } 
+    }
+}
+
+void actualizarDireccionY(sf::Vector2f posicionRectangulo, float prePosicionX, float prePosicionY, int &direccionX, int &direccionY)
+{
+    (posicionRectangulo.y > prePosicionY) ? direccionY = 1 : direccionY = -1;
     if (posicionRectangulo.y == prePosicionY)
     {
         direccionY = 0;
@@ -115,7 +122,7 @@ int main()
     sf::Vector2f barreraSize = {20.f, 120.f};
     sf::RectangleShape barrera(barreraSize);
     barrera.setFillColor(sf::Color::Green);
-    sf::Vector2f posicionBarrera = {50.f, 0.f};
+    sf::Vector2f posicionBarrera = {100.f, 100.f};
     barrera.setPosition(posicionBarrera);
 
     float prePosicionX = posicionRectangulo.x;
@@ -132,14 +139,17 @@ int main()
                 window.close();
         }
 
-        movimientoJugador(posicionRectangulo);
-        actualizarDireccion(posicionRectangulo, prePosicionX, prePosicionY, direccionX, direccionY);
+        
         
         std::array<float, 4> shapeBordes = getBorder(shapeSize, posicionRectangulo);
         std::array<float, 4> barreraBordes = getBorder(barreraSize, posicionBarrera);
         std::cout << direccionX << std::endl;
+        movimientoJugadorX(posicionRectangulo);
+        actualizarDireccionX(posicionRectangulo, prePosicionX, prePosicionY, direccionX, direccionY);
         if (checarColision(shapeBordes, barreraBordes))
             activarColisionX(shapeBordes, barreraBordes, posicionRectangulo, direccionX, direccionY);
+        movimientoJugadorY(posicionRectangulo);
+        actualizarDireccionY(posicionRectangulo, prePosicionX, prePosicionY, direccionX, direccionY);
         if (checarColision(shapeBordes, barreraBordes))
             activarColisionY(shapeBordes, barreraBordes, posicionRectangulo, direccionX, direccionY);
         shape.setPosition(posicionRectangulo);
