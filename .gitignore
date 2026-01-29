@@ -1,0 +1,5 @@
+*.o
+.clangd
+danilito
+*.exe
+makefile
