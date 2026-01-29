@@ -1,12 +1,6 @@
 #include "Player.hpp"
 
-Player::Player(sf::Vector2f pos, sf::Vector2f size): pos(pos), size(size){}
-
-void Player::render(sf::RenderWindow& window){
-  rectShape.setPosition(pos);
-  rectShape.setSize(size);
-  window.draw(rectShape);
-}
+Player::Player(sf::Vector2f pos, sf::Vector2f size): Renderable(pos,size){}
 
 void Player::movementX(){
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){

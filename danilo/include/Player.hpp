@@ -1,9 +1,10 @@
+#pragma once
+#include "Renderable.hpp"
 #include "Wall.hpp"
 
-class Player{
+class Player: public Renderable{
 public:
   Player(sf::Vector2f pos, sf::Vector2f size);
-  void render(sf::RenderWindow& window);
 
   void movementX();
   void movementY();
@@ -11,10 +12,6 @@ public:
 private:
   const sf::Vector2f speed = {2,2};
   sf::Vector2f lastPostion;
-
-  sf::Vector2f pos;
-  sf::Vector2f size;
-  sf::RectangleShape rectShape;
 
 private:
   void collisionsX();
